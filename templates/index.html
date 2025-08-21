@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Email Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div id="homepage" class="homepage-container">
+        <div class="content-overlay">
+            <h1>SMART EMAIL GENERATOR</h1>
+            <a href="#" class="enter-button" onclick="showDashboard()">ENTER</a>
+        </div>
+    </div>
+
+    <div id="dashboard" class="dashboard-container hidden">
+        <div id="sidebar" class="sidebar collapsed">
+            <div class="hamburger" onclick="toggleMenu()">
+                <span>☰</span>
+            </div>
+            <div class="logo">
+                Smart Email
+            </div>
+            <ul class="menu">
+                <li class="active">
+                    <a href="#" onclick="showSection('dashboard-content')">
+                        <span class="icon">🏠</span> 
+                        <span class="text">Generate Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="showGeneratorAndTone()">
+                        <span class="icon">✉️</span> 
+                        <span class="text">Generate Email</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="showReplyGenerator()">
+                        <span class="icon">↩️</span> 
+                        <span class="text">Generate Reply</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="logout()">
+                        <span class="icon">➡️</span> 
+                        <span class="text">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div id="dashboard-content" class="content-section">
+                <h1>Dashboard</h1>
+                <p>Welcome to your Smart Email Generator dashboard!</p>
+            </div>
+            
+            <div id="email-generator-content" class="content-section hidden">
+                <h2>Generate Email</h2>
+                
+                <form id="formal-email-form" class="hidden" onsubmit="submitFormalForm(event)">
+                    <div class="form-group">
+                        <label for="formal-recipient-name">Recipient Name:</label>
+                        <input type="text" id="formal-recipient-name" name="recipient_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="formal-sender-name">Your Name:</label>
+                        <input type="text" id="formal-sender-name" name="sender_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="formal-body-topic">Topic:</label>
+                        <textarea id="formal-body-topic" name="body_topic" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">Generate Formal Email</button>
+                </form>
+                
+                <form id="informal-email-form" class="hidden" onsubmit="submitInformalForm(event)">
+                    <div class="form-group">
+                        <label for="informal-recipient-name">Recipient Name:</label>
+                        <input type="text" id="informal-recipient-name" name="recipient_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="informal-body-topic">Topic:</label>
+                        <textarea id="informal-body-topic" name="body_topic" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">Generate Informal Email</button>
+                </form>
+                
+                <div id="email-result-container" class="result-container hidden">
+                    <h3>Generated Email:</h3>
+                    <h4 id="generated-subject"></h4>
+                    <pre id="generated-email"></pre>
+                    <button class="copy-button" onclick="copyText('generated-email')">Copy to Clipboard</button>
+                </div>
+            </div>
+
+            <div id="reply-generator-content" class="content-section hidden">
+                <h2>Generate Reply</h2>
+                <form id="reply-form" onsubmit="submitReplyForm(event)">
+                    <div class="form-group">
+                        <label for="email-text">Paste Email Here:</label>
+                        <textarea id="email-text" rows="10" required oninput="autoDetectSender()"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="reply-recipient-name">Recipient Name:</label>
+                        <input type="text" id="reply-recipient-name" name="recipient_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tone-select">Tone:</label>
+                        <select id="tone-select">
+                            <option value="Professional">Professional</option>
+                            <option value="Casual">Casual</option>
+                            <option value="Friendly">Friendly</option>
+                            <option value="None">None</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-button">Generate Reply</button>
+                </form>
+                
+                <div id="reply-result-container" class="result-container hidden">
+                    <h3>Generated Reply:</h3>
+                    <pre id="generated-reply"></pre>
+                    <button class="copy-button" onclick="copyText('generated-reply')">Copy to Clipboard</button>
+                </div>
+            </div>
+
+            <div id="loading-spinner" class="spinner-overlay hidden">
+                <div class="spinner"></div>
+            </div>
+        </div>
+        
+        <div id="tone-modal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3>Choose a Tone</h3>
+                <div class="tone-options">
+                    <button class="tone-button" onclick="showFormalForm()">Formal</button>
+                    <button class="tone-button" onclick="showInformalForm()">Informal</button>
+                </div>
+                <button class="close-button" onclick="hideToneModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDashboard() {
+            document.getElementById('homepage').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+        }
+
+        function logout() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('homepage').classList.remove('hidden');
+        }
+
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+        }
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+        
+        function showGeneratorAndTone() {
+            showSection('email-generator-content');
+            document.getElementById('email-result-container').classList.add('hidden');
+            document.getElementById('formal-email-form').classList.add('hidden');
+            document.getElementById('informal-email-form').classList.add('hidden');
+            showToneModal();
+        }
+
+        function showReplyGenerator() {
+            showSection('reply-generator-content');
+            document.getElementById('reply-result-container').classList.add('hidden');
+        }
+
+        function showToneModal() {
+            document.getElementById('tone-modal').classList.remove('hidden');
+        }
+
+        function hideToneModal() {
+            document.getElementById('tone-modal').classList.add('hidden');
+        }
+
+        function showFormalForm() {
+            hideToneModal();
+            document.getElementById('formal-email-form').classList.remove('hidden');
+        }
+        
+        function showInformalForm() {
+            hideToneModal();
+            document.getElementById('informal-email-form').classList.remove('hidden');
+        }
+        
+        function submitFormalForm(event) {
+            event.preventDefault();
+            const data = {
+                tone: 'Formal',
+                recipient_name: document.getElementById('formal-recipient-name').value,
+                sender_name: document.getElementById('formal-sender-name').value,
+                body_topic: document.getElementById('formal-body-topic').value,
+            };
+            generateEmail(data);
+        }
+
+        function submitInformalForm(event) {
+            event.preventDefault();
+            const data = {
+                tone: 'Informal',
+                recipient_name: document.getElementById('informal-recipient-name').value,
+                body_topic: document.getElementById('informal-body-topic').value,
+            };
+            generateEmail(data);
+        }
+        
+        function submitReplyForm(event) {
+            event.preventDefault();
+            const data = {
+                email_text: document.getElementById('email-text').value,
+                tone: document.getElementById('tone-select').value,
+            };
+            generateReply(data);
+        }
+
+        function showSpinner() {
+            document.getElementById('loading-spinner').classList.remove('hidden');
+        }
+        
+        function hideSpinner() {
+            document.getElementById('loading-spinner').classList.add('hidden');
+        }
+
+        function copyText(elementId) {
+            const textToCopy = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy text:', err);
+            });
+        }
+        
+        function autoDetectSender() {
+            const emailText = document.getElementById('email-text').value;
+            const nameInput = document.getElementById('reply-recipient-name');
+            let match = emailText.match(/(Hi|Hello|Dear)\s+([\w\s]+),/i);
+
+            if (match && match[2]) {
+                const detectedName = match[2].trim();
+                nameInput.value = detectedName;
+            } else {
+                nameInput.value = '';
+            }
+        }
+        
+        // --- UPDATED generateEmail function to handle subject and body ---
+        function generateEmail(data) {
+            showSpinner();
+            fetch('/generate_email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                hideSpinner();
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('generated-subject').textContent = `Subject: ${data.subject}`;
+                    document.getElementById('generated-email').textContent = data.email;
+                    document.getElementById('email-result-container').classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                hideSpinner();
+                console.error('Error:', error);
+                alert('An error occurred while generating the email.');
+            });
+        }
+        
+        function generateReply(data) {
+            showSpinner();
+            fetch('/generate_reply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                hideSpinner();
+                document.getElementById('generated-reply').textContent = data.reply;
+                document.getElementById('reply-result-container').classList.remove('hidden');
+            })
+            .catch(error => {
+                hideSpinner();
+                console.error('Error:', error);
+                alert('An error occurred while generating the reply.');
+            });
+        }
+    </script>
+
+</body>
+</html>

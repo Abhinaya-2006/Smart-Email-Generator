@@ -1,0 +1,294 @@
+/* --- Global & Homepage Styles --- */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.homepage-container {
+    background-image: url('https://cdn.impossibleimages.ai/wp-content/uploads/2023/04/25130031/AI-Background-Image-Generator-How-It-Works-and-Why-You-Need-It-610x342.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.content-overlay {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.enter-button {
+    display: inline-block;
+    padding: 15px 40px;
+    font-size: 1.5em;
+    color: white;
+    background-color: #e74c3c;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.enter-button:hover {
+    background-color: #c0392b;
+}
+
+/* --- Dashboard Styles --- */
+.hidden {
+    display: none !important;
+}
+
+.dashboard-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-image: url('https://imgv3.fotor.com/images/gallery/Blue-geometric-pattern-background.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.sidebar {
+    background-color: rgba(25, 118, 210, 0.9);
+    color: white;
+    width: 250px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed .logo {
+    display: none;
+}
+
+.sidebar.collapsed .text {
+    display: none;
+}
+
+.sidebar.collapsed .menu li a {
+    justify-content: center;
+    padding: 15px 5px;
+}
+
+.sidebar.collapsed .hamburger {
+    justify-content: center;
+}
+
+.hamburger {
+    padding: 15px;
+    font-size: 1.5em;
+    cursor: pointer;
+    text-align: center;
+}
+.hamburger span {
+    line-height: 1;
+}
+
+.logo {
+    padding: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-left: 15px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.menu li a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.menu li a:hover {
+    background-color: #1565c0;
+}
+
+.menu li.active a {
+    background-color: #0d47a1;
+    border-radius: 25px 0 0 25px;
+}
+
+.icon {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+.text {
+    font-size: 1em;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+/* New CSS for the form and result display */
+.content-section {
+    width: 100%;
+}
+
+#email-generator-content {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.submit-button:hover {
+    background-color: #1565c0;
+}
+
+.result-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f8ff;
+    border: 1px solid #cceeff;
+    border-radius: 5px;
+}
+
+.result-container h3 {
+    margin-top: 0;
+}
+
+.result-container pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: monospace;
+}
+
+/* --- Modal Pop-up Styles --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+}
+
+.tone-options {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.tone-button {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    border: 2px solid #1976d2;
+    background-color: #fff;
+    color: #1976d2;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tone-button:hover {
+    background-color: #1976d2;
+    color: #fff;
+}
+
+.close-button {
+    margin-top: 20px;
+    padding: 8px 15px;
+    background-color: #ccc;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+        align-items: center;
+    }
+    .logo {
+        display: none;
+    }
+    .text {
+        display: none;
+    }
+    .icon {
+        margin-right: 0;
+    }
+    .menu li a {
+        justify-content: center;
+        padding: 15px 5px;
+    }
+    .menu li.active a {
+        border-radius: 10px;
+    }
+}
